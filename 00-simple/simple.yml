@@ -1,0 +1,21 @@
+---
+# Solution for Exercise 1: Basic Playbook Creation
+# This playbook installs basic system packages
+
+- name: Install basic system packages
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Install wget, curl, and tree packages
+      ansible.builtin.dnf:
+        name:
+          - wget
+          - curl
+          - tree
+        state: present
+        update_cache: yes
+
+    - name: Verify packages are installed
+      ansible.builtin.debug:
+        msg: "Successfully installed wget, curl, and tree packages"
