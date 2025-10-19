@@ -1,0 +1,15 @@
+- name: Create users with secure passwords
+  hosts: all
+  vars_files:
+    - vars/user_passwords.yml
+  
+  tasks:
+    - name: Create multiple users
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        state: present
+        groups: "{{ item.groups }}"
+        password: "{{ user_passwords[item.name] | password_hash('sha512') }}"
+      loop:
+        - { name: 'surote', groups: 'wheel' }
+        - { name: 'appox', groups: 'developers' }
