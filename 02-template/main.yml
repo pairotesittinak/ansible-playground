@@ -4,7 +4,7 @@
   become: true
 
   vars:
-    site_title: "My Demo Site"
+    site_title: "My Demo Site 2"
     welcome_message: "Hello from Ansible Template!"
 
   tasks:
