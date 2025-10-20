@@ -28,9 +28,8 @@
       ansible.builtin.dnf:
         name:
           - wget
-          - curl
           - tree
-        state: absent
+        state: present
         update_cache: true
 
     - name: Gather package facts
