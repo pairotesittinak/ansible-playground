@@ -6,6 +6,23 @@
   hosts: webservers
   become: true
 
+  pre_tasks:
+    - name: Gather package facts before installation
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Check if wget exists
+      ansible.builtin.debug:
+        msg: "wget is {{ 'already installed' if 'wget' in ansible_facts.packages else 'NOT installed' }}"
+
+    - name: Check if curl exists
+      ansible.builtin.debug:
+        msg: "curl is {{ 'already installed' if 'curl' in ansible_facts.packages else 'NOT installed' }}"
+
+    - name: Check if tree exists
+      ansible.builtin.debug:
+        msg: "tree is {{ 'already installed' if 'tree' in ansible_facts.packages else 'NOT installed' }}"
+
   tasks:
     - name: Install wget, curl, and tree packages
       ansible.builtin.dnf:
@@ -16,6 +33,31 @@
         state: present
         update_cache: true
 
-    - name: Verify packages are installed
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Verify wget is installed
+      ansible.builtin.assert:
+        that:
+          - "'wget' in ansible_facts.packages"
+        success_msg: "wget is installed successfully"
+        fail_msg: "wget is NOT installed"
+
+    - name: Verify curl is installed
+      ansible.builtin.assert:
+        that:
+          - "'curl' in ansible_facts.packages"
+        success_msg: "curl is installed successfully"
+        fail_msg: "curl is NOT installed"
+
+    - name: Verify tree is installed
+      ansible.builtin.assert:
+        that:
+          - "'tree' in ansible_facts.packages"
+        success_msg: "tree is installed successfully"
+        fail_msg: "tree is NOT installed"
+
+    - name: All packages verified
       ansible.builtin.debug:
-        msg: "Successfully installed wget, curl, and tree packages"
+        msg: "All packages (wget, curl, tree) are installed and verified successfully!"
