@@ -1,0 +1,3 @@
+---
+# Simple external variables
+db_host: "localhost"

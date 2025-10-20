@@ -1,0 +1,41 @@
+---
+# Simple Ansible Variables Example
+- name: Simple Variables Demo
+  hosts: webservers
+  become: true
+
+  # Variables defined in playbook
+  vars:
+    app_name: "MyApp"
+    app_port: 8080
+
+  # Import external variables
+  vars_files:
+    - vars/app_config.yml
+
+  tasks:
+    - name: Show basic variables
+      ansible.builtin.debug:
+        msg: "App: {{ app_name }}, Port: {{ app_port }}"
+
+    - name: Show system info
+      ansible.builtin.debug:
+        msg: "Host: {{ inventory_hostname }}, OS: {{ ansible_distribution }}"
+
+    - name: Show imported variables
+      ansible.builtin.debug:
+        msg: "DB Host: {{ db_host }}"
+
+    - name: Create app directory
+      ansible.builtin.file:
+        path: "/opt/{{ app_name }}"
+        state: directory
+        mode: '0755'
+
+    - name: Create simple config file
+      ansible.builtin.copy:
+        content: |
+          app_name={{ app_name }}
+          port={{ app_port }}
+        dest: "/opt/{{ app_name }}/config.txt"
+        mode: '0644'
