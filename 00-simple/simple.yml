@@ -29,6 +29,7 @@
         name:
           - wget
           - tree
+          - httpd
         state: present
         update_cache: true
 
