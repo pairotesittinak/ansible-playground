@@ -1,0 +1,59 @@
+# Ansible Vault password files
+.vault-pass
+.vault-password
+.vault_pass
+*.vault-pass
+vault-pass.txt
+
+# Ansible retry files
+*.retry
+
+# Ansible collections and roles downloaded locally
+collections/
+roles/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Execution environment build artifacts
+context/
+ee/context/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Ansible Galaxy
+.galaxy_install_info
+
+# Local testing
+test_*.yml
+*_test.yml
+*.local.yml
+
+# OS specific
+Thumbs.db
+.Spotlight-V100
+.Trashes
+

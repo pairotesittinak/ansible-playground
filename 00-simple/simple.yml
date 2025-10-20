@@ -4,7 +4,7 @@
 
 - name: Install basic system packages
   hosts: webservers
-  become: yes
+  become: true
 
   tasks:
     - name: Install wget, curl, and tree packages
@@ -14,7 +14,7 @@
           - curl
           - tree
         state: present
-        update_cache: yes
+        update_cache: true
 
     - name: Verify packages are installed
       ansible.builtin.debug:
