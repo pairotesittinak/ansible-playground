@@ -13,8 +13,6 @@ dependencies:
     - gcc
     - systemd-devel
     - python3.11-devel
-    - libreoffice-core
-    - libreoffice-calc
 
 # https://github.com/ansible/ansible-builder/issues/540
 options:
