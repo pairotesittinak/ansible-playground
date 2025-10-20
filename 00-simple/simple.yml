@@ -30,7 +30,7 @@
           - wget
           - curl
           - tree
-        state: present
+        state: absent
         update_cache: true
 
     - name: Gather package facts
