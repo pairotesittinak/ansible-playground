@@ -7,6 +7,14 @@
   gather_facts: true
 
   tasks:
+    - name: Display mount points
+      ansible.builtin.debug:
+        msg: "Mount points: {{ ansible_mounts }}"
+
+    - name: Display all fact names
+      ansible.builtin.debug:
+        msg: "Available facts: {{ ansible_facts.keys() }}"
+
     - name: Display all facts (JSON)
       ansible.builtin.debug:
         var: ansible_facts
