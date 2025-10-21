@@ -1,0 +1,26 @@
+---
+# Demonstrate different task statuses (green, yellow, red)
+
+- name: Task Status Demo
+  hosts: localhost
+  become: false
+
+  tasks:
+    - name: Green task - No changes needed
+      ansible.builtin.debug:
+        msg: "This task shows GREEN (ok) - no changes made"
+
+    - name: Yellow task - Changes made
+      ansible.builtin.file:
+        path: /tmp/ansible_demo.txt
+        state: touch
+      register: file_result
+
+    - name: Red task - Will fail
+      ansible.builtin.command: /bin/false
+      ignore_errors: true
+      register: fail_result
+
+    - name: Show results
+      ansible.builtin.debug:
+        msg: "File created: {{ file_result.changed }}, Failed task: {{ fail_result.failed }}"
