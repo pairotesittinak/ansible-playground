@@ -3,7 +3,7 @@
 # This playbook installs basic system packages
 
 - name: Install basic system packages
-  hosts: webservers
+  hosts: rh-target
   become: true
 
   pre_tasks:

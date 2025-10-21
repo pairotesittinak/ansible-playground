@@ -1,0 +1,67 @@
+---
+- name: Simple Loops and Conditions Demo
+  hosts: localhost
+  connection: local
+  gather_facts: true
+
+  vars:
+    # Simple list of items
+    fruits:
+      - apple
+      - banana
+      - orange
+
+    # Simple list of users
+    users:
+      - name: alice
+        admin: true
+      - name: bob
+        admin: false
+      - name: charlie
+        admin: true
+
+  tasks:
+    # ==========================================
+    # BASIC LOOP EXAMPLES
+    # ==========================================
+
+    - name: "1. Simple loop - print each fruit"
+      ansible.builtin.debug:
+        msg: "Fruit: {{ item }}"
+      loop: "{{ fruits }}"
+
+    - name: "2. Loop with user info"
+      ansible.builtin.debug:
+        msg: "User: {{ item.name }}, Admin: {{ item.admin }}"
+      loop: "{{ users }}"
+
+    # ==========================================
+    # BASIC CONDITION EXAMPLES
+    # ==========================================
+
+    - name: "3. Simple condition - only on Linux"
+      ansible.builtin.debug:
+        msg: "Running on Linux system"
+      when: ansible_os_family == "RedHat"
+
+    - name: "4. Condition with variable"
+      ansible.builtin.debug:
+        msg: "This will always run"
+      when: users is defined
+
+    # ==========================================
+    # LOOP + CONDITION COMBINED
+    # ==========================================
+
+    - name: "5. Loop with condition - only show admin users"
+      ansible.builtin.debug:
+        msg: "Admin user: {{ item.name }}"
+      loop: "{{ users }}"
+      when: item.admin
+
+    - name: "6. Loop with condition - only show non-admin users"
+      ansible.builtin.debug:
+        msg: "Regular user: {{ item.name }}"
+      loop: "{{ users }}"
+      when: not item.admin
+      

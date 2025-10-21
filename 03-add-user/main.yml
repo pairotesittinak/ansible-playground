@@ -1,5 +1,8 @@
+---
+# Solution for Exercise 2: Creating Users with Secure Passwords
 - name: Create users with secure passwords
-  hosts: all
+  hosts: rh-target
+  
   vars_files:
     - vars/user_passwords.yml
   
@@ -12,4 +15,4 @@
         password: "{{ user_passwords[item.name] | password_hash('sha512') }}"
       loop:
         - { name: 'surote', groups: 'wheel' }
-        - { name: 'appox', groups: 'developers' }
+        - { name: 'appox', groups: 'wheel' }
