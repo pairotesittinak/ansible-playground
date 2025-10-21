@@ -1,0 +1,12 @@
+---
+# Debug Ansible facts
+
+- name: Debug Ansible Facts
+  hosts: localhost
+  become: false
+  gather_facts: true
+
+  tasks:
+    - name: Display all facts (JSON)
+      ansible.builtin.debug:
+        var: ansible_facts
