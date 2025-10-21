@@ -1,0 +1,40 @@
+---
+# Check target hosts and sudo functionality
+
+- name: Check target hosts and sudo
+  hosts: rh-target
+  become: true
+
+  tasks:
+    - name: Check host connectivity
+      ansible.builtin.ping:
+
+    - name: Check sudo access
+      ansible.builtin.command: whoami
+      register: sudo_check
+      changed_when: false
+
+    - name: Display current user
+      ansible.builtin.debug:
+        msg: "Running as: {{ sudo_check.stdout }}"
+
+    - name: Check system info
+      ansible.builtin.setup:
+        gather_subset: min
+
+    - name: Display hostname
+      ansible.builtin.debug:
+        msg: "Hostname: {{ ansible_hostname }}"
+
+    - name: Display OS info
+      ansible.builtin.debug:
+        msg: "OS: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+
+    - name: Check sudo works
+      ansible.builtin.command: sudo -l
+      register: sudo_list
+      changed_when: false
+
+    - name: Display sudo privileges
+      ansible.builtin.debug:
+        msg: "{{ sudo_list.stdout_lines }}"
