@@ -1,8 +1,8 @@
 ---
 # Solution for Exercise 1: Basic Playbook Creation
-# This playbook installs basic system packages
+# This playbook installs httpd package
 
-- name: Install basic system packages
+- name: Install httpd package
   hosts: rh-target
   become: true
 
@@ -11,25 +11,14 @@
       ansible.builtin.package_facts:
         manager: auto
 
-    - name: Check if wget exists
+    - name: Check if httpd exists
       ansible.builtin.debug:
-        msg: "wget is {{ 'already installed' if 'wget' in ansible_facts.packages else 'NOT installed' }}"
-
-    - name: Check if curl exists
-      ansible.builtin.debug:
-        msg: "curl is {{ 'already installed' if 'curl' in ansible_facts.packages else 'NOT installed' }}"
-
-    - name: Check if tree exists
-      ansible.builtin.debug:
-        msg: "tree is {{ 'already installed' if 'tree' in ansible_facts.packages else 'NOT installed' }}"
+        msg: "httpd is {{ 'already installed' if 'httpd' in ansible_facts.packages else 'NOT installed' }}"
 
   tasks:
-    - name: Install wget, curl, and tree packages
+    - name: Install httpd package
       ansible.builtin.dnf:
-        name:
-          - wget
-          - tree
-          - httpd
+        name: httpd
         state: present
         update_cache: true
 
@@ -37,27 +26,13 @@
       ansible.builtin.package_facts:
         manager: auto
 
-    - name: Verify wget is installed
+    - name: Verify httpd is installed
       ansible.builtin.assert:
         that:
-          - "'wget' in ansible_facts.packages"
-        success_msg: "wget is installed successfully"
-        fail_msg: "wget is NOT installed"
+          - "'httpd' in ansible_facts.packages"
+        success_msg: "httpd is installed successfully"
+        fail_msg: "httpd is NOT installed"
 
-    - name: Verify curl is installed
-      ansible.builtin.assert:
-        that:
-          - "'curl' in ansible_facts.packages"
-        success_msg: "curl is installed successfully"
-        fail_msg: "curl is NOT installed"
-
-    - name: Verify tree is installed
-      ansible.builtin.assert:
-        that:
-          - "'tree' in ansible_facts.packages"
-        success_msg: "tree is installed successfully"
-        fail_msg: "tree is NOT installed"
-
-    - name: All packages verified
+    - name: The httpd package verified
       ansible.builtin.debug:
-        msg: "All packages (wget, curl, tree) are installed and verified successfully!"
+        msg: "httpd package is installed and verified successfully!"
