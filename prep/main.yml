@@ -1,0 +1,41 @@
+---
+# Install Ansible Core and Ansible Navigator
+
+- name: Install Ansible
+  hosts: rh-target
+  become: true
+
+  tasks:
+    - name: Install ansible-core with dnf
+      ansible.builtin.dnf:
+        name: ansible-core
+        state: present
+
+    - name: Install python3-pip
+      ansible.builtin.dnf:
+        name: python3-pip
+        state: present
+
+    - name: Install ansible-navigator with pip
+      ansible.builtin.pip:
+        name: ansible-navigator
+        state: present
+        executable: pip3
+
+    - name: Verify ansible installation
+      ansible.builtin.command: ansible --version
+      register: ansible_ver
+      changed_when: false
+
+    - name: Verify ansible-navigator installation
+      ansible.builtin.command: ansible-navigator --version
+      register: nav_ver
+      changed_when: false
+
+    - name: Show ansible version
+      ansible.builtin.debug:
+        msg: "{{ ansible_ver.stdout_lines[0] }}"
+
+    - name: Show ansible-navigator version
+      ansible.builtin.debug:
+        msg: "{{ nav_ver.stdout_lines[0] }}"
