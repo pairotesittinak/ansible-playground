@@ -1,0 +1,16 @@
+---
+# Change become to true and false see result
+
+- name: Name Checking
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Name Checking
+      ansible.builtin.command: whoami
+      register: whoami_result
+      changed_when: false
+
+    - name: Display whoami result
+      ansible.builtin.debug:
+        msg: "{{ whoami_result.stdout }}"
