@@ -12,15 +12,10 @@
       - podman
 
   tasks:
-    - name: Check service status
-      ansible.builtin.systemd:
-        name: "{{ item }}"
-      register: service_status
-      failed_when: false
-      changed_when: false
-      loop: "{{ services_to_check }}"
+    - name: Gather service facts
+      ansible.builtin.service_facts:
 
     - name: Display service status
       ansible.builtin.debug:
-        msg: "{{ item.item }}: {{ 'Running' if item.status.ActiveState == 'active' else 'Stopped' }}"
-      loop: "{{ service_status.results }}"
+        msg: "{{ item }}: {{ ansible_facts.services[item + '.service'].state | default('not found') }}"
+      loop: "{{ services_to_check }}"
