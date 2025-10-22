@@ -18,3 +18,4 @@
         msg: "httpd service found, will restart"
       notify: restart httpd
       when: ansible_facts.services['httpd.service'] is defined
+      changed_when: true # This is ensure the handler will be executed even if the service is already running
