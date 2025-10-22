@@ -75,7 +75,31 @@ ansible-playbook -i inventory/inv.ini <playbook-path> --ask-vault-pass
 ansible-playbook -i inventory/inv.ini <playbook-path> --vault-password-file .vault_pass
 ```
 
+## Key Ansible Concepts
+
+### Register Variables
+**Purpose**: Capture task output and metadata for use in subsequent tasks.
+
+**How it works**: The `register` directive stores the result of a task in a variable that you can reference later. This allows you to make decisions based on previous task results, display output, or use data in conditional statements.
+
+**Common use cases**: Checking service status, capturing command output, handling errors, and creating dynamic playbooks that adapt based on system state.
+
+### Become (Privilege Escalation)
+**Purpose**: Execute tasks with elevated permissions (like sudo or su).
+
+**How it works**: The `become` directive allows Ansible to run tasks as a different user, typically root, when the current user doesn't have sufficient privileges. It supports multiple methods including sudo, su, and doas.
+
+**Common use cases**: Installing packages, modifying system files, managing services, and performing administrative tasks that require root access.
+
+### Facts
+**Purpose**: Automatic system information gathering for dynamic playbook behavior.
+
+**How it works**: Ansible automatically collects system information (hostname, OS, memory, network interfaces, etc.) and makes it available as variables. Facts are gathered at the start of each play unless disabled.
+
+**Common use cases**: Conditional logic based on OS type, dynamic configuration using system information, and creating portable playbooks that adapt to different environments.
+
 ## Learning Path
 
 1. Explore numbered directories for different concepts
 2. Check `inventory/` for variable examples
+3. Review `util/` directory for practical examples

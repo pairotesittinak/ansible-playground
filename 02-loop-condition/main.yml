@@ -5,13 +5,22 @@
   gather_facts: true
 
   vars:
-    # Simple list of items
+    # string variable
+    my_name: "Surote Wongpaiboon"
+
+    # list variable
     fruits:
       - apple
       - banana
       - orange
 
-    # Simple list of users
+    # dictionary variable
+    my_info:
+      name: Surote Wongpaiboon
+      age: 30
+      city: Bangkok
+
+    # list of dictionary variable
     users:
       - name: alice
         admin: true
@@ -24,6 +33,9 @@
     # ==========================================
     # BASIC LOOP EXAMPLES
     # ==========================================
+    - name: "0. Print full users"
+      ansible.builtin.debug:
+        msg: "full users {{ users }}"
 
     - name: "1. Simple loop - print each fruit"
       ansible.builtin.debug:

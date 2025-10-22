@@ -1,0 +1,14 @@
+---
+# Register Variables Example
+- name: Register Variables
+  hosts: localhost
+
+  tasks:
+    - name: Get system uptime
+      ansible.builtin.command: uptime
+      register: uptime_result
+      changed_when: false
+
+    - name: Display uptime
+      ansible.builtin.debug:
+        msg: "System uptime: {{ uptime_result }}"

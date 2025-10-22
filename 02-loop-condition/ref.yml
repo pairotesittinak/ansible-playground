@@ -1,0 +1,46 @@
+---
+- name: Reference Variables
+  hosts: localhost
+  connection: local
+
+  vars:
+    # string variable
+    my_name: "Surote Wongpaiboon"
+
+    # list variable
+    fruits:
+      - apple
+      - banana
+      - orange
+
+    # dictionary variable
+    my_info:
+      name: Surote Wongpaiboon
+      age: 30
+      city: Bangkok
+
+    # list of dictionary variable
+    users:
+      - name: alice
+        admin: true
+      - name: bob
+        admin: false
+      - name: charlie
+        admin: true
+
+  tasks:
+    - name: Print my name
+      ansible.builtin.debug:
+        msg: "My name is {{ my_name }}"
+
+    - name: Print first fruit
+      ansible.builtin.debug:
+        msg: "First fruit: {{ fruits[0] }}"
+
+    - name: Print my_info.name
+      ansible.builtin.debug:
+        msg: "My info name: {{ my_info.name }}"
+
+    - name: Print users[0].name
+      ansible.builtin.debug:
+        msg: "User 0 name: {{ users[0].name }}"
