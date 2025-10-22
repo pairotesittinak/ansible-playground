@@ -1,0 +1,24 @@
+---
+- name: Render simple HTML template
+  hosts: webservers
+  become: true
+
+  vars:
+    site_title: "FACT!"
+
+  tasks:
+
+    - name: Deploy index.html from template
+      ansible.builtin.template:
+        src: templates/simple.html.j2
+        dest: /var/www/html/index.html
+        mode: '0644'
+      vars:
+        generated_by: "ansible"
+      notify: Restart httpd
+
+  handlers:
+    - name: Restart httpd
+      ansible.builtin.service:
+        name: httpd
+        state: restarted
