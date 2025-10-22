@@ -1,0 +1,26 @@
+---
+- name: Check service status
+  hosts: all
+  become: true
+
+  vars:
+    services_to_check:
+      - httpd
+      - sshd
+      - firewalld
+      - chronyd
+      - podman
+
+  tasks:
+    - name: Check service status
+      ansible.builtin.systemd:
+        name: "{{ item }}"
+      register: service_status
+      failed_when: false
+      changed_when: false
+      loop: "{{ services_to_check }}"
+
+    - name: Display service status
+      ansible.builtin.debug:
+        msg: "{{ item.item }}: {{ 'Running' if item.status.ActiveState == 'active' else 'Stopped' }}"
+      loop: "{{ service_status.results }}"
