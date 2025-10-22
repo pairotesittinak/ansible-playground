@@ -1,0 +1,14 @@
+---
+- name: Check disk space on root mount
+  hosts: localhost
+  become: true
+  gather_facts: true
+
+  tasks:
+
+    - name: Check root mount disk space
+      ansible.builtin.debug:
+        msg: "{{ ansible_hostname }} - WARNING: Root mount has less than 20% available space"
+      when: >
+        (ansible_mounts | selectattr('mount', 'equalto', '/') | map(attribute='size_available') | first | int) /
+        (ansible_mounts | selectattr('mount', 'equalto', '/') | map(attribute='size_total') | first | int) < 0.2
