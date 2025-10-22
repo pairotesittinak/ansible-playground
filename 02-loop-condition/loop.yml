@@ -1,0 +1,31 @@
+---
+- name: Reference Variables
+  hosts: localhost
+  connection: local
+
+  vars:
+    # list variable
+    fruits:
+      - apple
+      - banana
+      - orange
+
+    # list of dictionary variable
+    users:
+      - name: alice
+        admin: true
+      - name: bob
+        admin: false
+      - name: charlie
+        admin: true
+
+  tasks:
+    - name: Print fruits
+      ansible.builtin.debug:
+        msg: "Fruit: {{ item }}"
+      loop: "{{ fruits }}"
+
+    - name: Print users
+      ansible.builtin.debug:
+        msg: "User: {{ item.name }}, Admin: {{ item.admin }}"
+      loop: "{{ users }}"
