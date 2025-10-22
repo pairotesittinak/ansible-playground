@@ -5,10 +5,9 @@
 
   handlers:
     - name: Restart httpd
-      ansible.builtin.systemd:
+      ansible.builtin.service:
         name: httpd
         state: restarted
-      when: ansible_facts.services['httpd.service'] is defined
 
   tasks:
     - name: Check if httpd service exists
