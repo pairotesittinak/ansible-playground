@@ -1,0 +1,21 @@
+---
+- name: Simple handler example
+  hosts: all
+  become: true
+
+  handlers:
+    - name: Restart httpd
+      ansible.builtin.systemd:
+        name: httpd
+        state: restarted
+      when: ansible_facts.services['httpd.service'] is defined
+
+  tasks:
+    - name: Check if httpd service exists
+      ansible.builtin.service_facts:
+
+    - name: Trigger httpd restart if service exists
+      ansible.builtin.debug:
+        msg: "httpd service found, will restart"
+      notify: restart httpd
+      when: ansible_facts.services['httpd.service'] is defined
