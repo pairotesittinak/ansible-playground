@@ -1,0 +1,28 @@
+---
+# Generate a report listing all hostnames, placed only on devgcp
+- name: Generate hosts report
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Ensure web root exists
+      ansible.builtin.file:
+        path: /var/www/html
+        state: directory
+        mode: '0755'
+
+    # Deploy hosts report only on devgcp
+    - name: Deploy hosts report (only on devgcp)
+      ansible.builtin.template:
+        src: templates/hosts-report.html.j2
+        dest: /var/www/html/hosts-report.html
+        mode: '0644'
+      when: inventory_hostname == 'devgcp'
+      notify: Restart httpd
+
+  handlers:
+    - name: Restart httpd
+      ansible.builtin.service:
+        name: httpd
+        state: restarted

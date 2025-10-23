@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Hosts Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; line-height: 1.6; }
+    h1 { color: #ba0000; }
+    ul { list-style: none; padding: 0; }
+    li { background: #f4f4f4; padding: 0.5rem; margin: 0.5rem 0; border-left: 4px solid #ba0000; }
+    .info { color: #666; font-size: 0.9rem; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Ansible Hosts Report</h1>
+  
+  <p><strong>Total Hosts:</strong> {{ ansible_play_hosts | length }}</p>
+  
+  <h2>Host List:</h2>
+  <ul>
+{% for host in ansible_play_hosts %}
+    <li>{{ host }}</li>
+{% endfor %}
+  </ul>
+  
+  <div class="info">
+    Generated on {{ ansible_date_time.date }} at {{ ansible_date_time.time }}<br>
+    Report stored on: {{ inventory_hostname }}
+  </div>
+</body>
+</html>
+
