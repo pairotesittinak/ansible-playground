@@ -19,6 +19,28 @@ This playbook demonstrates how to send emails with HTML attachments using Ansibl
 1. **SMTP Server Access**: You need access to an SMTP server (Gmail, Outlook, etc.)
 2. **Python mail module**: The `mail` module requires Python's `smtplib` and `email` libraries
 3. **App Password**: For Gmail, you'll need to generate an App Password
+4. **Ansible Collections**: This playbook uses the `community.general.mail` module
+
+### Installing Required Collections
+
+```bash
+# Install the community.general collection
+ansible-galaxy collection install community.general
+
+# Or install all collections from requirements.yml
+ansible-galaxy collection install -r requirements.yml
+```
+
+### Alternative: Using ansible-navigator
+
+If you prefer using `ansible-navigator` (Red Hat's Ansible automation platform), the collections are typically pre-installed in the execution environment:
+
+```bash
+# Using ansible-navigator with execution environment
+ansible-navigator run main.yml --eei quay.io/ansible/ansible-runner:latest
+```
+
+**Note**: The `community.general.mail` module is part of the `community.general` collection. If you encounter "couldn't resolve module/action 'mail'" error, ensure the collection is installed or use `ansible-navigator` with an execution environment that includes the required collections.
 
 ## Configuration
 

@@ -1,6 +1,6 @@
 ---
 - name: Send Email with HTML Attachment
-  hosts: localhost
+  hosts: devgcp
   gather_facts: yes
   vars_files:
     - vars/email_config.yml
