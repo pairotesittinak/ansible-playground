@@ -1,0 +1,19 @@
+---
+- name: Create hello-ansible.txt with hostname and IP
+  hosts: all
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Ensure /groupx directory exists
+      ansible.builtin.file:
+        path: /groupx
+        state: directory
+        mode: '0755'
+
+    - name: Generate hello-ansible.txt from template
+      ansible.builtin.template:
+        src: templates/hello-ansible.txt.j2
+        dest: /groupx/hello-ansible.txt
+        mode: '0644'
+        backup: true
