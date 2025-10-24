@@ -2,7 +2,7 @@
 # Ping 8.8.8.8
 
 - name: Ping 8.8.8.8
-  hosts: localhost
+  hosts: group2-og
   become: false
 
   tasks:
