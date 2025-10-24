@@ -6,6 +6,11 @@
     - vars/email_config.yml
   
   tasks:
+
+ #   - name: Get all hosts facts
+ #     debug:
+ #       var: hostvars
+
     - name: Create consolidated HTML report for all hosts
       template:
         src: templates/email-report.html.j2
