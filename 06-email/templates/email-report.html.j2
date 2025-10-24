@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System Report</title>
+    <title>System Report - All Hosts</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,7 +11,7 @@
             background-color: #f5f5f5;
         }
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             background-color: white;
             padding: 20px;
@@ -25,11 +25,25 @@
             border-radius: 5px;
             margin-bottom: 20px;
         }
+        .host-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .host-header {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 6px 6px 0 0;
+        }
         .section {
             margin-bottom: 20px;
             padding: 15px;
-            border-left: 4px solid #3498db;
-            background-color: #f8f9fa;
+            border-left: 4px solid #95a5a6;
+            background-color: white;
         }
         .status-ok {
             color: #27ae60;
@@ -57,6 +71,12 @@
             background-color: #34495e;
             color: white;
         }
+        .summary {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
         .footer {
             margin-top: 30px;
             padding-top: 20px;
@@ -69,48 +89,66 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>System Report</h1>
-            <p>Generated on: {{ ansible_date_time.date }} at {{ ansible_date_time.time }}</p>
+            <h1>Consolidated System Report</h1>
+            <p>Generated on: {{ hostvars[ansible_play_hosts[0]].ansible_date_time.date }} at {{ hostvars[ansible_play_hosts[0]].ansible_date_time.time }}</p>
         </div>
 
-        <div class="section">
-            <h2>System Information</h2>
-            <table>
-                <tr>
-                    <td><strong>Hostname:</strong></td>
-                    <td>{{ ansible_hostname }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Operating System:</strong></td>
-                    <td>{{ ansible_distribution }} {{ ansible_distribution_version }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Kernel:</strong></td>
-                    <td>{{ ansible_kernel }}</td>
-                </tr>
-                <tr>
-                    <td><strong>Architecture:</strong></td>
-                    <td>{{ ansible_architecture }}</td>
-                </tr>
-            </table>
+        <div class="summary">
+            <h2>Summary</h2>
+            <p><strong>Total Hosts:</strong> {{ ansible_play_hosts | length }}</p>
+            <p><strong>Hosts in this report:</strong> {{ ansible_play_hosts | join(', ') }}</p>
         </div>
 
-        <div class="section">
-            <h2>System Status</h2>
-            <p><span class="status-ok">✓</span> System is operational</p>
-            <p><span class="status-ok">✓</span> All critical services are running</p>
-            <p><span class="status-ok">✓</span> Disk space is adequate</p>
-        </div>
+{% for host in ansible_play_hosts %}
+        <div class="host-section">
+            <div class="host-header">
+                <h2>{{ hostvars[host].ansible_hostname | default(host) }}</h2>
+            </div>
 
-        <div class="section">
-            <h2>Recent Activity</h2>
-            <ul>
-                <li>System backup completed successfully</li>
-                <li>Security updates applied</li>
-                <li>Log files rotated</li>
-                <li>Performance monitoring active</li>
-            </ul>
+            <div class="section">
+                <h3>System Information</h3>
+                <table>
+                    <tr>
+                        <td><strong>Hostname:</strong></td>
+                        <td>{{ hostvars[host].ansible_hostname | default('N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Operating System:</strong></td>
+                        <td>{{ hostvars[host].ansible_distribution | default('N/A') }} {{ hostvars[host].ansible_distribution_version | default('') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kernel:</strong></td>
+                        <td>{{ hostvars[host].ansible_kernel | default('N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Architecture:</strong></td>
+                        <td>{{ hostvars[host].ansible_architecture | default('N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IP Address:</strong></td>
+                        <td>{{ hostvars[host].ansible_default_ipv4.address | default('N/A') }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section">
+                <h3>System Status</h3>
+                <p><span class="status-ok">✓</span> System is operational</p>
+                <p><span class="status-ok">✓</span> All critical services are running</p>
+                <p><span class="status-ok">✓</span> Disk space is adequate</p>
+            </div>
+
+            <div class="section">
+                <h3>Recent Activity</h3>
+                <ul>
+                    <li>System backup completed successfully</li>
+                    <li>Security updates applied</li>
+                    <li>Log files rotated</li>
+                    <li>Performance monitoring active</li>
+                </ul>
+            </div>
         </div>
+{% endfor %}
 
         <div class="footer">
             <p>This report was automatically generated by Ansible.</p>
