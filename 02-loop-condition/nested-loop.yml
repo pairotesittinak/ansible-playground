@@ -1,0 +1,22 @@
+---
+- name: Nested Loop
+  hosts: localhost
+
+  vars:
+    # list variable
+    fruits:
+      - apple
+      - banana
+      - orange
+
+    # nested list variable
+    vegetables:
+      - tomato
+      - potato
+      - onion
+
+  tasks:
+    - name: Print fruits
+      ansible.builtin.debug:
+        msg: "Fruit: {{ item.0 }} and Vegetable: {{ item.1 }}"
+      loop: "{{ fruits | product(vegetables) }}"

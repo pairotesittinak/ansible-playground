@@ -1,5 +1,5 @@
 ---
-# Install Ansible Core and Ansible Navigator
+# Install Ansible Core and Ansible Navigator, podman
 
 - name: Install Ansible
   hosts: rh-control-group
@@ -19,6 +19,11 @@
     - name: Install sshpass
       ansible.builtin.dnf:
         name: sshpass
+        state: present
+
+    - name: Install podman
+      ansible.builtin.dnf:
+        name: podman
         state: present
 
     - name: Install ansible-navigator with pip
