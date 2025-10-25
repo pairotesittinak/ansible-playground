@@ -3,6 +3,9 @@
 .vault-password
 .vault_pass
 *.vault-pass
+*.vault-pass*
+*/.vault-pass*
+
 vault-pass.txt
 
 # Ansible retry files
