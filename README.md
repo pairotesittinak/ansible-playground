@@ -98,6 +98,112 @@ ansible-playbook -i inventory/production/inv.ini examples/templates/solution-hel
 ### Execution Environments
 - **EE Configuration**: `utils/execution-environments/ee.yml`
 
+## 🐛 Debugging and Testing
+
+### Debug Module
+The `debug` module is used to print variable values and messages during playbook execution.
+
+**Common Usage:**
+```yaml
+# Print a simple message
+- name: Display message
+  ansible.builtin.debug:
+    msg: "This is a debug message"
+
+# Print a variable
+- name: Show variable value
+  ansible.builtin.debug:
+    var: ansible_hostname
+
+# Print multiple variables
+- name: Show system info
+  ansible.builtin.debug:
+    msg: "Host: {{ ansible_hostname }}, IP: {{ ansible_default_ipv4.address }}"
+
+# Conditional debug
+- name: Debug when condition is true
+  ansible.builtin.debug:
+    msg: "Package is installed"
+  when: "'httpd' in ansible_facts.packages"
+```
+
+**Examples in this repo:**
+- `examples/variables/01-variable/print-var.yml` - Variable printing
+- `examples/web-services/main.yml` - Package verification
+- `utils/system/fact.yml` - System information display
+
+### Assert Module
+The `assert` module validates conditions and fails the playbook if assertions are not met.
+
+**Common Usage:**
+```yaml
+# Simple assertion
+- name: Verify package is installed
+  ansible.builtin.assert:
+    that:
+      - "'httpd' in ansible_facts.packages"
+    success_msg: "httpd is installed successfully"
+    fail_msg: "httpd is NOT installed"
+
+# Multiple conditions (AND logic)
+- name: Verify system requirements
+  ansible.builtin.assert:
+    that:
+      - ansible_distribution == "RedHat"
+      - ansible_distribution_major_version >= "8"
+      - ansible_memtotal_mb >= 2048
+    fail_msg: "System does not meet requirements"
+
+# Complex assertions
+- name: Validate disk space
+  ansible.builtin.assert:
+    that:
+      - item.size_available > item.size_total * 0.1
+    fail_msg: "Disk {{ item.mount }} has less than 10% free space"
+  loop: "{{ ansible_mounts }}"
+  when: item.mount == '/'
+```
+
+**Key Features:**
+- **`that`**: List of conditions to check (all must be true)
+- **`success_msg`**: Message displayed when all assertions pass
+- **`fail_msg`**: Message displayed when any assertion fails
+- **`quiet`**: Suppress success messages (only show failures)
+
+**Examples in this repo:**
+- `examples/web-services/main.yml` - Package installation verification
+- `examples/web-services/uninstall-httpd.yml` - Package removal verification
+- `examples/loops-conditions/02-loop-condition/diskcheck.yml` - Disk space validation
+
+### Best Practices
+
+1. **Use `debug` for:**
+   - Troubleshooting playbook execution
+   - Displaying variable values
+   - Showing intermediate results
+   - Conditional information display
+
+2. **Use `assert` for:**
+   - Validating pre-requisites
+   - Verifying task outcomes
+   - Ensuring system requirements
+   - Testing conditions in playbooks
+
+3. **Combine both for robust playbooks:**
+```yaml
+- name: Check system requirements
+  ansible.builtin.debug:
+    msg: "Checking system: {{ ansible_distribution }} {{ ansible_distribution_version }}"
+
+- name: Assert requirements met
+  ansible.builtin.assert:
+    that:
+      - ansible_distribution in ['RedHat', 'CentOS', 'Rocky']
+      - ansible_memtotal_mb >= 1024
+    fail_msg: "System requirements not met"
+    success_msg: "System requirements verified"
+```
+
 ## 📋 Inventory Management
 
 ### Production Inventory

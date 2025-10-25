@@ -1,0 +1,36 @@
+---
+# Uninstall httpd package and clean up
+# This playbook removes httpd package and stops the service
+
+- name: Uninstall httpd package
+  hosts: rh-target
+  become: true
+
+  tasks:
+    - name: Stop httpd service if running
+      ansible.builtin.service:
+        name: httpd
+        state: stopped
+      when: "'httpd' in ansible_facts.packages"
+      failed_when: false
+
+    - name: Uninstall httpd package
+      ansible.builtin.dnf:
+        name: httpd
+        state: absent
+        autoremove: true
+
+    - name: Gather package facts after uninstallation
+      ansible.builtin.package_facts:
+        manager: auto
+
+    - name: Verify httpd is uninstalled
+      ansible.builtin.assert:
+        that:
+          - "'httpd' not in ansible_facts.packages"
+        success_msg: "httpd is uninstalled successfully"
+        fail_msg: "httpd is still installed"
+
+    - name: Uninstallation complete
+      ansible.builtin.debug:
+        msg: "httpd package has been uninstalled successfully!"
