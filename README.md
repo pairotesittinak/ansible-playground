@@ -1,105 +1,133 @@
 # Ansible Playground
 
-A collection of Ansible playbooks for learning and testing various automation scenarios.
+A comprehensive Ansible learning and testing environment with organized examples, utilities, and production-ready playbooks.
 
-## Project Structure
+## 📁 Repository Structure
 
 ```
 ansible-playground/
-├── 00-httpd/           # Basic HTTP server installation
-├── 01-variable/        # Variable usage examples
-├── 02-loop-condition/ # Loops and conditions
-├── 03-add-user/        # User management
-├── 04-template/        # Template usage
-├── prep/              # System preparation and setup
-├── inventory/          # Inventory files and variables
-└── ee/                # Execution Environment
+├── examples/                    # Learning examples and tutorials
+│   ├── web-services/           # HTTP/Apache/Nginx examples
+│   ├── variables/              # Variable usage examples
+│   ├── loops-conditions/       # Loops and conditional logic
+│   ├── user-management/        # User creation and management
+│   ├── templates/              # Jinja2 template examples
+│   ├── handlers/               # Handler examples
+│   └── notifications/          # Email and notification examples
+├── playbooks/                  # Production-ready playbooks
+│   ├── production/             # Production environment playbooks
+│   └── staging/                # Staging environment playbooks
+├── roles/                      # Reusable Ansible roles
+│   ├── common/                 # Common system tasks
+│   ├── web/                    # Web server roles
+│   └── monitoring/             # Monitoring and alerting roles
+├── templates/                  # Shared Jinja2 templates
+│   ├── html/                   # HTML templates
+│   ├── config/                 # Configuration file templates
+│   └── reports/                # Report templates
+├── inventory/                  # Inventory files
+│   ├── production/             # Production inventory
+│   └── staging/                # Staging inventory
+├── group_vars/                 # Group variables
+├── host_vars/                  # Host-specific variables
+└── utils/                      # Utility scripts and tools
+    ├── system/                 # System utilities
+    ├── network/                # Network utilities
+    ├── security/               # Security utilities
+    └── execution-environments/ # Ansible EE configurations
 ```
 
-## Quick Start
+## 🚀 Getting Started
 
-Run example playbooks:
-```bash
-ansible-playbook -i inventory/inv.ini 00-httpd/main.yml
-```
-
-## Playbooks
-
-### 00-httpd
-Basic HTTP server installation and configuration.
-
-### 01-variable
-Demonstrates variable usage with external variable files.
-
-### 02-loop-condition
-Shows loops, conditions, and control structures.
-
-### 03-add-user
-User management and password handling.
-
-### 04-template
-Template usage for configuration files.
-
-
-## Inventory
-
-The inventory is organized with:
-- **Groups**: `rh-target`, `rh-control-group`
-- **Group variables**: `inventory/group_vars/`
-- **Host variables**: `inventory/host_vars/`
-
-## Requirements
-
+### Prerequisites
 - Ansible 2.9+
-- Red Hat Enterprise Linux target hosts
-- SSH access to target hosts
-- Sudo privileges on target hosts
+- Python 3.6+
+- Access to target hosts
 
-## Usage
-
-All playbooks use the inventory file `inventory/inv.ini`. Run any playbook with:
-
+### Quick Start
 ```bash
-ansible-playbook -i inventory/inv.ini <playbook-path>
+# Run a simple example
+ansible-playbook -i inventory/production/inv.ini examples/web-services/httpd/main.yml
+
+# Run with specific host group
+ansible-playbook -i inventory/production/inv.ini examples/templates/solution-hello-ansible.yml --limit webservers
 ```
 
-### Using Vault
+## 📚 Examples
 
-For playbooks with encrypted variables, use vault:
+### Web Services
+- **HTTP Server Setup**: `examples/web-services/httpd/main.yml`
+- **Template Usage**: `examples/templates/solution-hello-ansible.yml`
 
+### Variables and Loops
+- **Variable Management**: `examples/variables/main.yml`
+- **Loop Examples**: `examples/loops-conditions/loop.yml`
+- **Conditional Logic**: `examples/loops-conditions/diskcheck.yml`
+
+### User Management
+- **User Creation**: `examples/user-management/main.yml`
+- **Password Management**: `examples/user-management/vars/user_passwords.yml`
+
+### Templates and Handlers
+- **Jinja2 Templates**: `examples/templates/templates/`
+- **Handler Examples**: `examples/handlers/main.yml`
+- **Email Reports**: `examples/notifications/main.yml`
+
+## 🔧 Utilities
+
+### System Utilities
+- **Service Checks**: `utils/system/check-service.yml`
+- **System Facts**: `utils/system/fact.yml`
+- **Privilege Escalation**: `utils/system/become.yml`
+
+### Execution Environments
+- **EE Configuration**: `utils/execution-environments/ee.yml`
+
+## 📋 Inventory Management
+
+### Production Inventory
 ```bash
-# With vault password prompt
-ansible-playbook -i inventory/inv.ini <playbook-path> --ask-vault-pass
-
-# With vault password file
-ansible-playbook -i inventory/inv.ini <playbook-path> --vault-password-file .vault_pass
+# Use production inventory
+ansible-playbook -i inventory/production/inv.ini playbook.yml
 ```
 
-## Key Ansible Concepts
+### Group Variables
+- **All Groups**: `inventory/production/group_vars/all.yml`
+- **Web Servers**: `inventory/production/group_vars/webservers.yml`
 
-### Register Variables
-**Purpose**: Capture task output and metadata for use in subsequent tasks.
+### Host Variables
+- **Host-specific configs**: `inventory/production/host_vars/`
 
-**How it works**: The `register` directive stores the result of a task in a variable that you can reference later. This allows you to make decisions based on previous task results, display output, or use data in conditional statements.
+## 🎯 Best Practices
 
-**Common use cases**: Checking service status, capturing command output, handling errors, and creating dynamic playbooks that adapt based on system state.
+1. **Use descriptive names** instead of numbered folders
+2. **Separate examples from production** code
+3. **Organize by functionality** rather than chronology
+4. **Keep templates centralized** for reusability
+5. **Use consistent naming** conventions
 
-### Become (Privilege Escalation)
-**Purpose**: Execute tasks with elevated permissions (like sudo or su).
+## 📖 Learning Path
 
-**How it works**: The `become` directive allows Ansible to run tasks as a different user, typically root, when the current user doesn't have sufficient privileges. It supports multiple methods including sudo, su, and doas.
+1. Start with `examples/variables/` to understand Ansible basics
+2. Move to `examples/loops-conditions/` for control structures
+3. Explore `examples/templates/` for dynamic content
+4. Practice with `examples/web-services/` for real-world scenarios
+5. Use `utils/` for common tasks and troubleshooting
 
-**Common use cases**: Installing packages, modifying system files, managing services, and performing administrative tasks that require root access.
+## 🔒 Security Notes
 
-### Facts
-**Purpose**: Automatic system information gathering for dynamic playbook behavior.
+- Vault files are encrypted and require `ansible-vault` to edit
+- Sensitive variables should be stored in vault files
+- Use `--ask-vault-pass` when running playbooks with encrypted variables
 
-**How it works**: Ansible automatically collects system information (hostname, OS, memory, network interfaces, etc.) and makes it available as variables. Facts are gathered at the start of each play unless disabled.
+## 📞 Support
 
-**Common use cases**: Conditional logic based on OS type, dynamic configuration using system information, and creating portable playbooks that adapt to different environments.
+For questions or issues:
+1. Check the example playbooks in the `examples/` directory
+2. Review the utility scripts in `utils/`
+3. Consult the Ansible documentation
+4. Check inventory configurations in `inventory/`
 
-## Learning Path
+---
 
-1. Explore numbered directories for different concepts
-2. Check `inventory/` for variable examples
-3. Review `util/` directory for practical examples
+**Note**: This repository has been restructured for better organization and maintainability. All original content has been preserved and reorganized into logical categories.
