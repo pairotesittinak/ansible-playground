@@ -26,6 +26,19 @@
         name: podman
         state: present
 
+    - name: Check if container image exists
+      ansible.builtin.command: podman image exists quay.io/rh_ee_swongpai/ansible-custom-ee:enablement-0
+      register: image_exists
+      changed_when: false
+      failed_when: false
+      become: false
+
+    - name: Pull container image if not exists
+      ansible.builtin.command: podman pull quay.io/rh_ee_swongpai/ansible-custom-ee:enablement-0
+      when: image_exists.rc != 0
+      changed_when: false
+      become: false
+
     - name: Install ansible-navigator with pip
       ansible.builtin.pip:
         name: ansible-navigator
