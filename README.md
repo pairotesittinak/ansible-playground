@@ -13,7 +13,8 @@ ansible-playground/
 │   ├── user-management/        # User creation and management
 │   ├── templates/              # Jinja2 template examples
 │   ├── handlers/               # Handler examples
-│   └── notifications/          # Email and notification examples
+│   ├── notifications/          # Email and notification examples
+│   └── monitoring/             # Monitoring examples (placeholder)
 ├── playbooks/                  # Production-ready playbooks
 │   ├── production/             # Production environment playbooks
 │   └── staging/                # Staging environment playbooks
@@ -26,14 +27,16 @@ ansible-playground/
 │   ├── config/                 # Configuration file templates
 │   └── reports/                # Report templates
 ├── inventory/                  # Inventory files
-│   ├── production/             # Production inventory
-│   └── staging/                # Staging inventory
-├── group_vars/                 # Group variables
-├── host_vars/                  # Host-specific variables
+│   └── production/             # Production inventory
+│       ├── group_vars/         # Group variables
+│       ├── host_vars/          # Host variables
+│       └── inv.ini            # Inventory file
+├── group_vars/                 # Global group variables
+├── host_vars/                  # Global host variables
 └── utils/                      # Utility scripts and tools
     ├── system/                 # System utilities
-    ├── network/                # Network utilities
-    ├── security/               # Security utilities
+    ├── network/                # Network utilities (placeholder)
+    ├── security/               # Security utilities (placeholder)
     └── execution-environments/ # Ansible EE configurations
 ```
 
@@ -47,7 +50,10 @@ ansible-playground/
 ### Quick Start
 ```bash
 # Run a simple example
-ansible-playbook -i inventory/production/inv.ini examples/web-services/httpd/main.yml
+ansible-playbook -i inventory/production/inv.ini examples/web-services/main.yml
+
+# Run template example
+ansible-playbook -i inventory/production/inv.ini examples/templates/solution-hello-ansible.yml
 
 # Run with specific host group
 ansible-playbook -i inventory/production/inv.ini examples/templates/solution-hello-ansible.yml --limit webservers
@@ -56,22 +62,28 @@ ansible-playbook -i inventory/production/inv.ini examples/templates/solution-hel
 ## 📚 Examples
 
 ### Web Services
-- **HTTP Server Setup**: `examples/web-services/httpd/main.yml`
+- **HTTP Server Setup**: `examples/web-services/main.yml`
 - **Template Usage**: `examples/templates/solution-hello-ansible.yml`
 
 ### Variables and Loops
-- **Variable Management**: `examples/variables/main.yml`
-- **Loop Examples**: `examples/loops-conditions/loop.yml`
-- **Conditional Logic**: `examples/loops-conditions/diskcheck.yml`
+- **Variable Management**: `examples/variables/01-variable/main.yml`
+- **Loop Examples**: `examples/loops-conditions/02-loop-condition/loop.yml`
+- **Conditional Logic**: `examples/loops-conditions/02-loop-condition/diskcheck.yml`
+- **Nested Loops**: `examples/loops-conditions/02-loop-condition/nested-loop.yml`
 
 ### User Management
-- **User Creation**: `examples/user-management/main.yml`
-- **Password Management**: `examples/user-management/vars/user_passwords.yml`
+- **User Creation**: `examples/user-management/03-add-user/main.yml`
+- **Password Management**: `examples/user-management/03-add-user/vars/user_passwords.yml`
 
 ### Templates and Handlers
 - **Jinja2 Templates**: `examples/templates/templates/`
-- **Handler Examples**: `examples/handlers/main.yml`
-- **Email Reports**: `examples/notifications/main.yml`
+  - `hello-ansible.txt.j2` - Simple hostname and IP template
+  - `index.html.j2` - HTML index page template
+  - `hosts-report.html.j2` - Host reporting template
+  - `simple.html.j2` - Basic HTML template
+- **Handler Examples**: `examples/handlers/05-handler/main.yml`
+- **Email Reports**: `examples/notifications/06-email/main.yml`
+- **Hello Ansible**: `examples/templates/solution-hello-ansible.yml`
 
 ## 🔧 Utilities
 
@@ -79,6 +91,9 @@ ansible-playbook -i inventory/production/inv.ini examples/templates/solution-hel
 - **Service Checks**: `utils/system/check-service.yml`
 - **System Facts**: `utils/system/fact.yml`
 - **Privilege Escalation**: `utils/system/become.yml`
+- **Ping Tests**: `utils/system/ping.yml`
+- **Color Output**: `utils/system/color.yml`
+- **System Checks**: `utils/system/check.yml`
 
 ### Execution Environments
 - **EE Configuration**: `utils/execution-environments/ee.yml`
@@ -94,9 +109,15 @@ ansible-playbook -i inventory/production/inv.ini playbook.yml
 ### Group Variables
 - **All Groups**: `inventory/production/group_vars/all.yml`
 - **Web Servers**: `inventory/production/group_vars/webservers.yml`
+- **Group1**: `inventory/production/group_vars/group1-og.yml`
+- **Group2**: `inventory/production/group_vars/group2-og.yml`
+- **Group3**: `inventory/production/group_vars/group3-og.yml`
 
 ### Host Variables
 - **Host-specific configs**: `inventory/production/host_vars/`
+- **Dev GCP**: `inventory/production/host_vars/devgcp.yml`
+- **G2 Host**: `inventory/production/host_vars/g2.yml`
+- **G3 Host**: `inventory/production/host_vars/g3.yml`
 
 ## 🎯 Best Practices
 
@@ -108,11 +129,14 @@ ansible-playbook -i inventory/production/inv.ini playbook.yml
 
 ## 📖 Learning Path
 
-1. Start with `examples/variables/` to understand Ansible basics
-2. Move to `examples/loops-conditions/` for control structures
-3. Explore `examples/templates/` for dynamic content
-4. Practice with `examples/web-services/` for real-world scenarios
-5. Use `utils/` for common tasks and troubleshooting
+1. **Start with Variables**: `examples/variables/01-variable/` to understand Ansible basics
+2. **Learn Control Structures**: `examples/loops-conditions/02-loop-condition/` for loops and conditions
+3. **Explore Templates**: `examples/templates/` for dynamic content generation
+4. **Practice Web Services**: `examples/web-services/` for real-world scenarios
+5. **User Management**: `examples/user-management/03-add-user/` for system administration
+6. **Handlers**: `examples/handlers/05-handler/` for service management
+7. **Notifications**: `examples/notifications/06-email/` for reporting
+8. **Utilities**: Use `utils/system/` for common tasks and troubleshooting
 
 ## 🔒 Security Notes
 
@@ -124,10 +148,28 @@ ansible-playbook -i inventory/production/inv.ini playbook.yml
 
 For questions or issues:
 1. Check the example playbooks in the `examples/` directory
-2. Review the utility scripts in `utils/`
+2. Review the utility scripts in `utils/system/`
 3. Consult the Ansible documentation
-4. Check inventory configurations in `inventory/`
+4. Check inventory configurations in `inventory/production/`
+5. Use the learning path above to progress through examples
+
+## 🎯 Available Examples
+
+### Complete Example List
+- **Variables**: `examples/variables/01-variable/` - Variable usage, registration, and printing
+- **Loops & Conditions**: `examples/loops-conditions/02-loop-condition/` - Loop constructs and conditional logic
+- **User Management**: `examples/user-management/03-add-user/` - User creation and password management
+- **Templates**: `examples/templates/` - Jinja2 template examples and solutions
+- **Handlers**: `examples/handlers/05-handler/` - Service restart and handler patterns
+- **Notifications**: `examples/notifications/06-email/` - Email reporting and notifications
+- **Web Services**: `examples/web-services/` - HTTP server configuration
+
+### Key Files to Start With
+- `examples/templates/solution-hello-ansible.yml` - Simple template example
+- `examples/variables/01-variable/main.yml` - Variable basics
+- `examples/loops-conditions/02-loop-condition/loop.yml` - Loop examples
+- `utils/system/fact.yml` - System information gathering
 
 ---
 
-**Note**: This repository has been restructured for better organization and maintainability. All original content has been preserved and reorganized into logical categories.
+**Note**: This repository has been restructured for better organization and maintainability. All original content has been preserved and reorganized into logical categories with descriptive folder names.
