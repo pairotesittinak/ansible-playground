@@ -1,0 +1,16 @@
+---
+- name: Pull nginx image using Podman
+  hosts: group1-og
+  gather_facts: no
+  
+  tasks:
+    - name: Pull nginx image
+      containers.podman.podman_image:
+        name: docker.io/library/nginx
+        pull: true
+        state: present
+      register: nginx_pull_result
+      
+    - name: Display pull result
+      debug:
+        msg: "Successfully pulled nginx image: {{ nginx_pull_result.image }}"

@@ -9,3 +9,9 @@
     - name: Ping 8.8.8.8
       ansible.builtin.command: ping -c 3 8.8.8.8
       changed_when: false
+      register: ping_result
+      when: ansible_hostname == "g201"
+
+    - name: Display ping result
+      ansible.builtin.debug:
+        msg: "{{ ping_result.stdout_lines }}"

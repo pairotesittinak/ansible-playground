@@ -90,16 +90,16 @@
     <div class="container">
         <div class="header">
             <h1>Consolidated System Report</h1>
-            <p>Generated on: {{ hostvars[ansible_play_hosts[0]].ansible_date_time.date }} at {{ hostvars[ansible_play_hosts[0]].ansible_date_time.time }}</p>
+            <p>Generated on: {{ ansible_date_time.date }} at {{ ansible_date_time.time }}</p>
         </div>
 
         <div class="summary">
             <h2>Summary</h2>
-            <p><strong>Total Hosts:</strong> {{ ansible_play_hosts | length }}</p>
-            <p><strong>Hosts in this report:</strong> {{ ansible_play_hosts | join(', ') }}</p>
+            <p><strong>Total Hosts:</strong> {{ report_hosts | default(ansible_play_hosts) | length }}</p>
+            <p><strong>Hosts in this report:</strong> {{ report_hosts | default(ansible_play_hosts) | join(', ') }}</p>
         </div>
 
-{% for host in ansible_play_hosts %}
+{% for host in report_hosts | default(ansible_play_hosts) %}
         <div class="host-section">
             <div class="host-header">
                 <h2>{{ hostvars[host].ansible_hostname | default(host) }}</h2>

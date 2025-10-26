@@ -12,11 +12,15 @@
 - name: Send Email with HTML Attachment
   hosts: localhost
   connection: local
-  gather_facts: no
+  gather_facts: yes
   vars_files:
     - vars/email_config.yml
   
   tasks:
+    - name: Display hosts from Play 1 that will be in the report
+      debug:
+        msg: "Generating report for hosts: {{ groups['group1-og'] | join(', ') }}"
+
 #   - name: Get all hosts facts
 #     debug:
 #       var: hostvars
@@ -26,6 +30,8 @@
         src: templates/email-report.html.j2
         dest: "/tmp/email-report-consolidated.html"
         mode: '0644'
+      vars:
+        report_hosts: "{{ groups['group1-og'] }}"
 
     - name: Send email with HTML attachment
       community.general.mail:
