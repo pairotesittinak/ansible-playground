@@ -1,0 +1,12 @@
+---
+# Debug Ansible facts
+
+- name: Memory
+  hosts: group2
+  become: false
+  gather_facts: true
+
+  tasks:
+   - name: Display Memory
+     ansible.builtin.debug:
+        msg: "Memory used: {{ ansible_memory_mb.real.used }}"
