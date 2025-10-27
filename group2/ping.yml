@@ -1,5 +1,5 @@
 - name: Ping 8.8.8.8
-  hosts: localhost
+  hosts: group2
   become: false
 
   tasks:

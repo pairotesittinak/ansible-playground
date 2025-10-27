@@ -1,0 +1,29 @@
+---
+# Debug variables with programming languages list
+
+- name: Debug Programming Languages
+  hosts: localhost
+  become: false
+
+  vars:
+    best_programming_language: python
+    programming_languages:
+      - python
+      - ruby
+      - c
+      - go
+      - nodejs
+
+  tasks:
+    - name: Print all languages
+      ansible.builtin.debug:
+        msg: "All languages: {{ programming_languages }}"
+
+    - name: Print best language
+      ansible.builtin.debug:
+        msg: "Best language: {{ best_programming_language }}"
+
+    - name: Print languages with loop
+      ansible.builtin.debug:
+        msg: "Language: {{ item }}"
+      loop: "{{ programming_languages }}"

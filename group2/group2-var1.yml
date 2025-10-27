@@ -1,0 +1,16 @@
+---
+# Debug variables with programming languages list
+
+- name: infomation
+  hosts: localhost
+  become: false
+
+  vars:
+      name: naruto
+      nickname: ruto
+      position: hokage
+
+  tasks:
+    - name: infomation
+      ansible.builtin.debug:
+        msg: "myinfo: {{ name }} {{ nickname }} {{ position }}"
