@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Report - All Hosts</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .host-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .host-header {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            margin: -20px -20px 15px -20px;
+            border-radius: 6px 6px 0 0;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-left: 4px solid #95a5a6;
+            background-color: white;
+        }
+        .status-ok {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .status-warning {
+            color: #f39c12;
+            font-weight: bold;
+        }
+        .status-error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+        .summary {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Consolidated System Report</h1>
+            <p>Generated on: {{ ansible_date_time.date }} at {{ ansible_date_time.time }}</p>
+        </div>
+
+        <div class="summary">
+            <h2>Summary</h2>
+            <p><strong>Total Hosts:</strong> {{ report_hosts | default(ansible_play_hosts) | length }}</p>
+            <p><strong>Hosts in this report:</strong> {{ report_hosts | default(ansible_play_hosts) | join(', ') }}</p>
+        </div>
+
+{% for host in report_hosts | default(ansible_play_hosts) %}
+        <div class="host-section">
+            <div class="host-header">
+                <h2>{{ hostvars[host].ansible_hostname | default(host) }}</h2>
+            </div>
+
+            <div class="section">
+                <h3>System Information</h3>
+                <table>
+                    <tr>
+                        <td><strong>Hostname:</strong></td>
+                        <td>{{ hostvars[host].ansible_hostname | default('N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Operating System:</strong></td>
+                        <td>{{ hostvars[host].ansible_distribution | default('N/A') }} {{ hostvars[host].ansible_distribution_version | default('') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kernel:</strong></td>
+                        <td>{{ hostvars[host].ansible_kernel | default('N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Architecture:</strong></td>
+                        <td>{{ hostvars[host].ansible_architecture | default('N/A') }}</td>
+                    </tr>
+                    <tr>
+                        <td><strong>IP Address:</strong></td>
+                        <td>{{ hostvars[host].ansible_default_ipv4.address | default('N/A') }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section">
+                <h3>System Status</h3>
+                <p><span class="status-ok">✓</span> System is operational</p>
+                <p><span class="status-ok">✓</span> All critical services are running</p>
+                <p><span class="status-ok">✓</span> Disk space is adequate</p>
+            </div>
+
+            <div class="section">
+                <h3>Recent Activity</h3>
+                <ul>
+                    <li>System backup completed successfully</li>
+                    <li>Security updates applied</li>
+                    <li>Log files rotated</li>
+                    <li>Performance monitoring active</li>
+                </ul>
+            </div>
+        </div>
+{% endfor %}
+
+        <div class="footer">
+            <p>This report was automatically generated by Ansible.</p>
+            <p>For questions or concerns, please contact the system administrator.</p>
+        </div>
+    </div>
+</body>
+</html>

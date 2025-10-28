@@ -1,0 +1,52 @@
+---
+# Play 1: Gather facts from remote hosts
+- name: Gather facts from remote hosts
+  hosts: group1-og
+  gather_facts: yes
+  tasks:
+    - name: Dummy task to ensure facts are gathered
+      debug:
+        msg: "Facts gathered for {{ inventory_hostname }}"
+
+# Play 2: Process and send email from localhost
+- name: Send Email with HTML Attachment
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars_files:
+    - vars/email_config.yml
+  
+  tasks:
+    - name: Display hosts from Play 1 that will be in the report
+      debug:
+        msg: "Generating report for hosts: {{ groups['group1-og'] | join(', ') }}"
+
+#   - name: Get all hosts facts
+#     debug:
+#       var: hostvars
+
+    - name: Create consolidated HTML report for all hosts
+      template:
+        src: templates/email-report.html.j2
+        dest: "/tmp/email-report-consolidated.html"
+        mode: '0644'
+      vars:
+        report_hosts: "{{ groups['group1-og'] }}"
+
+    - name: Send email with HTML attachment
+      community.general.mail:
+        host: "{{ smtp_host }}"
+        port: "{{ smtp_port }}"
+        username: "{{ smtp_username }}"
+        password: "{{ smtp_password }}"
+        to: "{{ email_to }}"
+        from: "{{ email_from }}"
+        subject: "{{ email_subject }}"
+        body: "{{ email_body }}"
+        attach: "/tmp/email-report-consolidated.html"
+        secure: "{{ smtp_secure }}"
+
+    - name: Clean up temporary HTML file
+      file:
+        path: "/tmp/email-report-consolidated.html"
+        state: absent
