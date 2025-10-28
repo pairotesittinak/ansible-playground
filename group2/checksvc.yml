@@ -1,0 +1,25 @@
+---
+- name: install and check 
+  hosts: group2
+  become: true
+
+  tasks:
+  - name: install
+    ansible.builtin.dnf:
+     name:
+      - httpd
+      - podman
+     state: present
+     update_cache: true
+    register: package_status
+
+  - name: start svc httpd
+    ansible.builtin.command: systemctl start httpd
+
+  - name: start svc podman
+    ansible.builtin.command: systemctl start podman
+
+  - name: check service
+    ansible.builtin.debug: 
+     var: package_status
+

@@ -1,0 +1,13 @@
+---
+- name: install 
+  hosts: group2
+  become: true
+
+  tasks:
+  - name: install
+    ansible.builtin.dnf:
+     name:
+      - httpd
+      - podman
+     state: present
+
