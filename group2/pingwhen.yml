@@ -1,0 +1,15 @@
+---
+# Register Variables Example
+- name: ping Value
+  hosts: group2
+
+  tasks:
+    - name: Get Ping Result
+      ansible.builtin.command: ping -c 3 8.8.8.8
+      register: ping_result
+      changed_when: false
+ 
+    - name: Display Ping
+      ansible.builtin.debug:
+        msg: "ping result: {{ ping_result }}"
+      when: inventory_hostname  == 'g201'
